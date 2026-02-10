@@ -42,11 +42,20 @@ class TestPasswordValidator(unittest.TestCase):
 
     def test_validate_is_not_valid_short(self):
         validator = PasswordValidator()
-        password = "Aa0Aa0Aa0"
+        password = "Aa0Aa0A"
 
         result = validator.validate(password)
 
         assert result.errors == ["must contain at least 8 characters"]
+        assert not result.is_valid
+
+    def test_validate_is_not_valid_long(self):
+        validator = PasswordValidator()
+        password = "Aa0Aa0Aa0Aa0Aa0Aa0"
+
+        result = validator.validate(password)
+
+        assert result.errors == ["must contain not more than 12 characters"]
         assert not result.is_valid
 
     def test_validate_is_not_valid_all_errors(self):
