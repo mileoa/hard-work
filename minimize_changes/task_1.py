@@ -1,6 +1,15 @@
 from copy import deepcopy
 
 
+class User:
+    def __init__(self, purchases_amount: int):
+        self._purchases_amount: int = purchases_amount
+
+    @property
+    def purchases_amount(self) -> int:
+        return self._purchases_amount
+
+
 class PromoCode:
     def __init__(self, price: float):
         if price <= 0:
@@ -8,7 +17,7 @@ class PromoCode:
         self._price: float = price
 
     @property
-    def price(self):
+    def price(self) -> float:
         return self._price
 
 
@@ -23,11 +32,11 @@ class DiscountPercentagesByPrice:
         self._discount_percentages: int = discount_percentages
 
     @property
-    def price_from(self):
+    def price_from(self) -> float:
         return self._price_from
 
     @property
-    def discount_percentages(self):
+    def discount_percentages(self) -> int:
         return self._discount_percentages
 
 
@@ -45,7 +54,9 @@ class DiscountCalculator:
         )
         self._max_discount_percetages: int = max_discount_percetages
 
-    def calulate_discount(self, price: float, promo_code: PromoCode = None) -> float:
+    def calulate_discount(
+        self, price: float, promo_code: PromoCode = None, purchases_amount: int = 0
+    ) -> float:
         total_discount: float = 0.0
         for percetages_by_price_discount in self._percetages_by_price_discount:
             if price >= percetages_by_price_discount.price_from:
@@ -56,6 +67,9 @@ class DiscountCalculator:
 
         if promo_code is not None:
             total_discount += promo_code.price
+
+        if purchases_amount > 3:
+            total_discount += price / 100 * 3
 
         total_discount = min(
             total_discount, price / 100 * self._max_discount_percetages

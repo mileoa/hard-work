@@ -1,5 +1,5 @@
 import unittest
-from task_1 import DiscountCalculator, DiscountPercentagesByPrice, PromoCode
+from task_1 import DiscountCalculator, DiscountPercentagesByPrice, PromoCode, User
 
 
 class TestDiscountCalculator(unittest.TestCase):
@@ -40,10 +40,10 @@ class TestDiscountCalculator(unittest.TestCase):
         assert discount == 50.00
 
     def test_promo_greater_price(self):
-        self.calculator = DiscountCalculator(
+        calculator = DiscountCalculator(
             max_discount_percetages=100, percetages_by_price=[]
         )
-        discount = self.calculator.calulate_discount(
+        discount = calculator.calulate_discount(
             price=100.00, promo_code=PromoCode(101.00)
         )
 
@@ -52,6 +52,28 @@ class TestDiscountCalculator(unittest.TestCase):
     def test_discount_greater_max_discount(self):
         discount = self.calculator.calulate_discount(
             price=100.00, promo_code=PromoCode(101.00)
+        )
+
+        assert discount == 50.00
+
+    def test_regular_customer_discount(self):
+        user = User(purchases_amount=3)
+        purchases_amount = user.purchases_amount
+        discount = self.calculator.calulate_discount(
+            price=100.00,
+            promo_code=PromoCode(101.00),
+            purchases_amount=purchases_amount,
+        )
+
+        assert discount == 50.00
+
+    def test_common_customer_discount(self):
+        user = User(purchases_amount=0)
+        purchases_amount = user.purchases_amount
+        discount = self.calculator.calulate_discount(
+            price=100.00,
+            promo_code=PromoCode(101.00),
+            purchases_amount=purchases_amount,
         )
 
         assert discount == 50.00
