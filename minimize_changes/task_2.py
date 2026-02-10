@@ -68,10 +68,25 @@ class LengthValidation(ValidateStrategy):
         return ValidationResult(is_valid, errors)
 
 
+class LowerCaseValidation(ValidateStrategy):
+
+    def validate(self, password):
+        errors: list[str] = []
+
+        is_valid: bool = any(char.islower() for char in password)
+        if not is_valid:
+            errors.append("must contain lowercase letter")
+
+        return ValidationResult(is_valid, errors)
+
+
 class PasswordValidator:
 
     def __init__(self):
-        self._validations: list[ValidateStrategy] = [LengthValidation(8, 12)]
+        self._validations: list[ValidateStrategy] = [
+            LengthValidation(8, 12),
+            LowerCaseValidation(),
+        ]
 
     def validate(self, password: str) -> ValidationResult:
         is_valid: bool = True
