@@ -68,7 +68,7 @@ class DiscountCalculator:
         if promo_code is not None:
             total_discount += promo_code.price
 
-        if purchases_amount > 3:
+        if purchases_amount >= 3:
             total_discount += price / 100 * 3
 
         total_discount = min(

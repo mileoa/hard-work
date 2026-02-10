@@ -61,22 +61,20 @@ class TestDiscountCalculator(unittest.TestCase):
         purchases_amount = user.purchases_amount
         discount = self.calculator.calulate_discount(
             price=100.00,
-            promo_code=PromoCode(101.00),
             purchases_amount=purchases_amount,
         )
 
-        assert discount == 50.00
+        assert discount == 3.0
 
     def test_common_customer_discount(self):
         user = User(purchases_amount=0)
         purchases_amount = user.purchases_amount
         discount = self.calculator.calulate_discount(
             price=100.00,
-            promo_code=PromoCode(101.00),
             purchases_amount=purchases_amount,
         )
 
-        assert discount == 50.00
+        assert discount == 0.0
 
 
 if __name__ == "__main__":
