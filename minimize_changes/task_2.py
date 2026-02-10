@@ -92,13 +92,26 @@ class UpperCaseValidation(ValidateStrategy):
         return ValidationResult(is_valid, errors)
 
 
+class DigitsValidation(ValidateStrategy):
+
+    def validate(self, password):
+        errors: list[str] = []
+
+        is_valid: bool = any(char.isdigit() for char in password)
+        if not is_valid:
+            errors.append("must contain digit")
+
+        return ValidationResult(is_valid, errors)
+
+
 class PasswordValidator:
 
     def __init__(self):
         self._validations: list[ValidateStrategy] = [
             LengthValidation(8, 12),
-            LowerCaseValidation(),
             UpperCaseValidation(),
+            LowerCaseValidation(),
+            DigitsValidation(),
         ]
 
     def validate(self, password: str) -> ValidationResult:

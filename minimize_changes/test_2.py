@@ -19,7 +19,7 @@ class TestPasswordValidator(unittest.TestCase):
 
         result = validator.validate(password)
 
-        assert result.errors == ["must contain digits"]
+        assert result.errors == ["must contain digit"]
         assert not result.is_valid
 
     def test_validate_is_not_valid_no_lowercase(self):
@@ -56,20 +56,23 @@ class TestPasswordValidator(unittest.TestCase):
         result = validator.validate(password)
 
         assert result.errors == ["must contain not more than 12 characters"]
-        assert not result.is_valid
+        self.assertFalse(result.is_valid)
 
-    def test_validate_is_not_valid_all_errors(self):
+    def test_validate_is_not_valid_empty(self):
         validator = PasswordValidator()
-        password = "abc"
+        password = ""
 
         result = validator.validate(password)
-
-        assert result.errors == [
-            "must contain at least 8 characters",
-            "must contain uppercase letter",
-            "must contain lowercase letter",
-        ]
-        assert not result.is_valid
+        self.assertEqual(
+            result.errors,
+            [
+                "must contain at least 8 characters",
+                "must contain uppercase letter",
+                "must contain lowercase letter",
+                "must contain digit",
+            ],
+        )
+        self.assertFalse(result.is_valid)
 
 
 if __name__ == "__main__":
