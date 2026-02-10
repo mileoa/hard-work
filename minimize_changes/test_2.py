@@ -74,6 +74,30 @@ class TestPasswordValidator(unittest.TestCase):
         )
         self.assertFalse(result.is_valid)
 
+    def test_strength_weak(self):
+        validator = PasswordValidator()
+        password = "123456A"
+
+        result = validator.validate(password)
+
+        self.assertEqual(result.strength, 1)
+
+    def test_strength_medium_special_chars(self):
+        validator = PasswordValidator()
+        password = "123456aA@"
+
+        result = validator.validate(password)
+
+        self.assertEqual(result.strength, 2)
+
+    def test_strength_strong(self):
+        validator = PasswordValidator()
+        password = "123456aA122@"
+
+        result = validator.validate(password)
+
+        self.assertEqual(result.strength, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
